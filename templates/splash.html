@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Smart Time Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .logo-container {
+            text-align: center;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .logo {
+            font-size: 60px;
+            animation: bounce 2s infinite;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 28px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+    </style>
+
+    <script>
+        setTimeout(function(){
+            window.location.href = "/dashboard";
+        }, 2500);
+    </script>
+</head>
+<body>
+
+    <div class="logo-container">
+        <div class="logo">🚀</div>
+        <h1>AI Smart Time Manager</h1>
+        <p>Smart scheduling made simple</p>
+    </div>
+
+</body>
+</html>

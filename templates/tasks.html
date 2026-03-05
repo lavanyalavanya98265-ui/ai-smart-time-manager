@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Task List</h2>
+
+<!-- Search + Filter -->
+<div class="mb-3 d-flex justify-content-between align-items-center gap-3 flex-wrap">
+
+    <input type="text" id="searchInput" class="form-control w-auto"
+           placeholder="Search task..." style="min-width:200px;">
+
+    <select id="statusFilter" class="form-select w-auto">
+        <option value="All">All</option>
+        <option value="Pending">Pending</option>
+        <option value="Done">Done</option>
+        <option value="Overdue">Overdue</option>
+    </select>
+
+</div>
+
+{% for task in tasks %}
+<div class="card p-3 mb-3 shadow-sm
+{% if task[4] == 'Overdue' %}
+    border-danger bg-light
+{% endif %}
+"
+data-status="{{ task[4] }}"
+data-title="{{ task[1] | lower }}">
+
+    <h5>{{ task[1] }}</h5>
+    <p>{{ task[2] }}</p>
+
+    <p><strong>Deadline:</strong> {{ task[3] }}</p>
+
+    <p>
+        <strong>Status:</strong>
+        {% if task[4] == "Overdue" %}
+            <span class="badge bg-danger">⚠ Overdue</span>
+        {% elif task[4] == "Pending" %}
+            <span class="badge bg-primary">Pending</span>
+        {% elif task[4] == "Done" %}
+            <span class="badge bg-success">Done</span>
+        {% endif %}
+
+        |
+        {% if task[5] == "High" %}
+            <span class="badge bg-danger">High</span>
+        {% elif task[5] == "Medium" %}
+            <span class="badge bg-warning text-dark">Medium</span>
+        {% else %}
+            <span class="badge bg-success">Low</span>
+        {% endif %}
+    </p>
+
+    <div class="mt-2">
+        {% if task[4] != "Done" %}
+            <a href="/complete/{{ task[0] }}" class="btn btn-success btn-sm">Done</a>
+        {% endif %}
+        <a href="/delete/{{ task[0] }}" class="btn btn-danger btn-sm">Delete</a>
+    </div>
+
+</div>
+{% endfor %}
+
+<!-- Search + Filter Script -->
+<script>
+function applyFilters() {
+    let selectedStatus = document.getElementById("statusFilter").value;
+    let searchText = document.getElementById("searchInput").value.toLowerCase();
+    let cards = document.querySelectorAll("[data-status]");
+
+    cards.forEach(card => {
+        let cardStatus = card.getAttribute("data-status");
+        let cardTitle = card.getAttribute("data-title");
+
+        let statusMatch = (selectedStatus === "All" || cardStatus === selectedStatus);
+        let searchMatch = cardTitle.includes(searchText);
+
+        if (statusMatch && searchMatch) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
+document.getElementById("statusFilter").addEventListener("change", applyFilters);
+document.getElementById("searchInput").addEventListener("keyup", applyFilters);
+</script>
+
+{% endblock %}

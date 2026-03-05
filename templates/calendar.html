@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Calendar View</h2>
+
+<div class="card p-4 shadow">
+    <div id="calendar"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        height: 600,
+        editable: true,
+
+        events: [
+            {% for task in tasks %}
+                {% if task[3] %}
+                {
+                    id: "{{ task[0] }}",
+                    title: "{{ task[1] }}",
+                    start: "{{ task[3] }}",
+                    {% if task[5] == "High" %}
+                        color: "#e74c3c"
+                    {% elif task[5] == "Medium" %}
+                        color: "#f1c40f"
+                    {% else %}
+                        color: "#2ecc71"
+                    {% endif %}
+                }{% if not loop.last %},{% endif %}
+                {% endif %}
+            {% endfor %}
+        ],
+
+        eventDrop: function(info) {
+            let taskId = info.event.id;
+            let newDate = info.event.start.toISOString().slice(0,16);
+
+            fetch("/update_date", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: taskId,
+                    new_date: newDate
+                })
+            });
+        }
+
+    });
+
+    calendar.render();
+});
+</script>
+
+{% endblock %}

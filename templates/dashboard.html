@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row text-center mb-4">
+    <div class="col-md-3">
+        <div class="card p-3 shadow">
+            <h5>Total</h5>
+            <h3>{{ total_tasks }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 shadow">
+            <h5>Pending</h5>
+            <h3>{{ pending_tasks }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 shadow">
+            <h5>Done</h5>
+            <h3>{{ done_tasks }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 shadow">
+            <h5>Overdue</h5>
+            <h3>{{ overdue_tasks }}</h3>
+        </div>
+    </div>
+</div>
+
+<div style="max-width:400px; height:300px; margin: 0 auto;">
+    <canvas id="taskChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+new Chart(document.getElementById('taskChart'), {
+    type: 'pie',
+    data: {
+        labels: ['Pending', 'Done', 'Overdue'],
+        datasets: [{
+            data: [
+                {{ pending_tasks }},
+                {{ done_tasks }},
+                {{ overdue_tasks }}
+            ],
+            backgroundColor: ['#0d6efd', '#198754', '#dc3545']
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+</script>
+
+{% endblock %}
